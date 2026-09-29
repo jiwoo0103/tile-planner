@@ -2,6 +2,8 @@
 
 An English tile planning site and an independent project introduction site, both built as static Astro pages. Purchase calculations run in the browser; there is no server API or database.
 
+The [user feedback research handoff](docs/USER_FEEDBACK_RESEARCH.md) records sourced requests for layout and planning features, current coverage, evidence limits, and a suggested order for future work. It is research, not an expansion of the approved roadmap.
+
 ## Local development
 
 ```powershell
