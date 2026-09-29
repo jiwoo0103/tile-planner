@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 500" role="img" aria-labelledby="title desc">
+  <title id="title">Measuring a rectangular 10 by 12 foot room</title>
+  <desc id="desc">Top view. The room is drawn at 30 drawing units per foot: 300 units wide and 360 units long. A horizontal dimension marks width 10 feet and a vertical dimension marks length 12 feet. The floor area is 120 square feet.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 10 5 L 0 0 L 0 10 Z" fill="#087d92"/></marker></defs>
+  <rect width="620" height="500" rx="18" fill="#edf7f9"/>
+  <rect x="175" y="100" width="300" height="360" fill="#fff" stroke="#112842" stroke-width="3"/>
+  <g fill="none" stroke="#087d92" stroke-width="2">
+    <path d="M175 90V48 M475 90V48 M165 100H115 M165 460H115"/>
+    <path d="M178 65H472 M130 103V457" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  </g>
+  <g font-family="Segoe UI,Arial,sans-serif" text-anchor="middle">
+    <text x="325" y="42" fill="#087d92" font-size="22" font-weight="600">Width: 10 ft</text>
+    <text x="96" y="280" transform="rotate(-90 96 280)" fill="#087d92" font-size="22" font-weight="600">Length: 12 ft</text>
+    <text x="325" y="256" fill="#617489" font-size="19">Rectangular floor</text>
+    <text x="325" y="300" fill="#112842" font-size="34" font-weight="700">120 sq ft</text>
+    <text x="325" y="333" fill="#617489" font-size="18">10 ft × 12 ft</text>
+  </g>
+</svg>

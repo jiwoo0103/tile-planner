@@ -1,0 +1,45 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('guides')).map(guide => ({
+    params: { id: guide.id }, props: { guide },
+  }));
+}
+interface Props { guide: CollectionEntry<'guides'>; }
+const { guide } = Astro.props;
+const { Content, headings } = await render(guide);
+const updated = guide.data.updatedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+---
+<SiteLayout title={guide.data.title} description={guide.data.description}>
+  <div class="shell py-10 sm:py-14">
+    <header class="max-w-3xl">
+      <a href="/guides/" class="mb-6 inline-flex min-h-11 items-center text-sm font-semibold text-teal hover:underline">← All guides</a>
+      <p class="eyebrow">Tile planning guide · {guide.data.topic}</p>
+      <h1 class="mt-4 text-3xl leading-tight font-bold tracking-tight sm:text-5xl">{guide.data.title}</h1>
+      <p class="mt-5 text-lg leading-8 text-muted">{guide.data.description}</p>
+      <p class="mt-4 text-sm text-muted">Updated <time datetime={guide.data.updatedDate.toISOString().slice(0, 10)}>{updated}</time></p>
+    </header>
+    <div class="mt-9 grid items-start gap-8 lg:grid-cols-[230px_minmax(0,1fr)] lg:gap-12">
+      <nav aria-label="On this page" class="panel lg:sticky lg:top-6">
+        <h2 class="text-sm font-bold">On this page</h2>
+        <ol class="mt-4 space-y-3 text-sm leading-6 text-muted">
+          {headings.filter(heading => heading.depth === 2).map(heading => <li><a class="hover:text-teal hover:underline" href={`#${heading.slug}`}>{heading.text}</a></li>)}
+        </ol>
+        <a href="/calculator/" class="mt-6 block border-t border-line pt-4 text-sm font-semibold text-teal hover:underline">Open tile calculator →</a>
+      </nav>
+      <article class="prose-content min-w-0 max-w-[70ch]">
+        <Content />
+      </article>
+    </div>
+  </div>
+</SiteLayout>
+<style>
+  article :global(h2) { scroll-margin-top: 1.5rem; }
+  article :global(h2:first-child) { margin-top: 0; }
+  article :global(strong) { color: var(--color-ink); }
+  article :global(figure) { margin-block: 1.75rem; }
+  article :global(img) { width: 100%; height: auto; border-radius: 1rem; }
+  article :global(figcaption) { margin-top: .75rem; font-size: .875rem; line-height: 1.6; }
+</style>

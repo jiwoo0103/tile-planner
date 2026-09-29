@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+@theme {
+  --color-ink: #112842;
+  --color-muted: #617489;
+  --color-teal: #087d92;
+  --color-line: #dce6eb;
+  --font-sans: 'Segoe UI', Arial, sans-serif;
+}
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #fbfcfd; color: var(--color-ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  button, a, input, select { -webkit-tap-highlight-color: transparent; }
+  button, select { cursor: pointer; }
+  button, input, select { font: inherit; }
+  :focus-visible { outline: 3px solid #0b91ac; outline-offset: 4px; }
+  input:focus, select:focus { outline-offset: 1px; }
+  [hidden] { display: none !important; }
+}
+@layer components {
+  .shell { @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8; }
+  .panel { @apply rounded-2xl border border-line bg-white p-5 sm:p-7; box-shadow: 0 4px 16px #11284203; }
+  .eyebrow { @apply text-xs font-bold tracking-[0.2em] uppercase text-teal; }
+  .btn-primary { @apply inline-flex min-h-12 items-center justify-center gap-4 rounded-lg bg-teal px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#08667a]; }
+  .btn-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-teal hover:bg-[#edf7f9]; }
+  .field-label { @apply mb-2 block text-sm font-semibold; }
+  .field-shell { @apply flex min-w-0 overflow-hidden rounded-lg border border-[#cddae1] bg-white; }
+  .field-shell:focus-within { border-color: #087d92; box-shadow: 0 0 0 2px #087d9214; }
+  .field-input { @apply min-h-11 w-full min-w-0 px-3 text-sm; }
+  .field-unit { @apply flex shrink-0 items-center border-l border-line bg-[#f7f9fb] px-3 text-xs text-muted; }
+  .helper { @apply mt-2 text-xs leading-relaxed text-muted; }
+  .result-card { @apply flex gap-3 rounded-xl border border-[#dfedf3] bg-white p-4 sm:p-5; }
+  .result-value { @apply mt-1 block text-2xl font-bold tracking-tight; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .icon-box { @apply flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#edf7fc] text-[#087aa3]; }
+  .prose-content { @apply text-base leading-7 text-muted; }
+  .prose-content h2 { @apply mb-4 mt-10 text-2xl font-bold text-ink; }
+  .prose-content h3 { @apply mb-3 mt-7 text-lg font-semibold text-ink; }
+  .prose-content p { @apply my-4; }
+  .prose-content a { @apply font-medium text-teal underline underline-offset-4; }
+  .prose-content ul, .prose-content ol { @apply my-4 space-y-2 pl-6; }
+  .prose-content ul { list-style: disc; }
+  .prose-content ol { list-style: decimal; }
+  .prose-content table { @apply my-6 w-full text-left text-sm; }
+  .prose-content th, .prose-content td { @apply border-b border-line px-3 py-3; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }

@@ -1,0 +1,82 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Icon from '../../components/Icon.astro';
+const dimensions = [
+  { id: 'roomWidth', label: 'Room width', value: '10', unit: 'ft' },
+  { id: 'roomLength', label: 'Room length', value: '12', unit: 'ft' },
+  { id: 'tileWidth', label: 'Tile width', value: '12', unit: 'in' },
+  { id: 'tileLength', label: 'Tile length', value: '12', unit: 'in' },
+];
+const results = [
+  { key: 'area', label: 'Room area', value: '120', unit: 'sq ft', note: 'Total floor area', icon: 'area' },
+  { key: 'base', label: 'Base tile count', value: '120', unit: 'tiles', note: 'Before waste allowance', icon: 'tile' },
+  { key: 'required', label: 'Tiles with allowance', value: '132', unit: 'tiles', note: 'Including 10% allowance', icon: 'shield' },
+  { key: 'boxes', label: 'Boxes to buy', value: '14', unit: 'boxes', note: 'Rounded up to full boxes', icon: 'box' },
+  { key: 'purchased', label: 'Total tiles purchased', value: '140', unit: 'tiles', note: '14 boxes × 10 tiles', icon: 'layers' },
+  { key: 'cost', label: 'Estimated tile cost', value: '—', unit: '', note: 'Add a price per box', icon: 'cost' },
+];
+---
+<SiteLayout title="Tile Calculator — Tiles, Boxes & Cost" description="Estimate tiles, full boxes and optional material cost for a rectangular room. Switch between feet, inches and metric without changing your measurements.">
+  <div class="shell">
+    <section class="relative flex items-center justify-between gap-10 overflow-hidden py-10 sm:py-12">
+      <div class="relative z-10 max-w-[660px]">
+        <p class="eyebrow">Plan smarter. Tile with confidence.</p>
+        <h1 class="mt-3 text-[42px] font-bold leading-[1.08] tracking-[-0.045em] sm:text-[58px]">Tile Calculator<span class="text-teal">.</span></h1>
+        <p class="mt-4 max-w-[570px] text-base leading-relaxed text-muted sm:text-lg">A little measuring goes a long way. Estimate the tiles, full boxes, and material budget for your next project.</p>
+        <div class="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-xs text-muted sm:text-sm">
+          {['Free to use', 'US & metric units', 'No sign-up'].map(label => <span class="flex items-center gap-2"><span class="rounded-full bg-[#dff1f3] p-1 text-teal"><Icon name="check" size={13}/></span>{label}</span>)}
+        </div>
+      </div>
+      <div class="relative hidden h-[200px] w-[330px] shrink-0 items-center justify-center lg:flex" aria-hidden="true">
+        <div class="absolute inset-5 rounded-full bg-[#e6f2f3] blur-3xl"></div>
+        <div class="grid h-44 w-52 grid-cols-4 gap-1.5 rounded-xl border border-[#c2dce1] bg-[#d4e6e8] p-2" style="transform:perspective(600px) rotateX(24deg) rotateZ(-18deg);box-shadow:15px 25px 40px #1e52621a">
+          {Array.from({length:16}, (_,i)=><div class:list={['rounded-sm border border-white/80',i%5===0?'bg-[#9fc8cb]':'bg-[#eff5f3]']}></div>)}
+        </div>
+        <span class="absolute -bottom-1 right-0 rounded-lg border border-line bg-white px-5 py-3 text-xs font-medium shadow-sm">Better spaces start with a plan.</span>
+      </div>
+    </section>
+    <div class="grid items-start gap-5 lg:grid-cols-[1.04fr_1fr]">
+      <section class="panel" aria-labelledby="details-title">
+        <div class="mb-6 flex items-start justify-between gap-3"><div><h2 id="details-title" class="text-xl font-bold tracking-tight">Project details</h2><p class="mt-1 text-sm text-muted">Your measurements. A clearer shopping list.</p></div><span class="rounded-full bg-[#edf7f8] px-2.5 py-1 text-[10px] font-bold tracking-wide text-teal">01 / INPUT</span></div>
+        <form id="calculator-form" novalidate>
+          <div class="mb-6 flex items-center justify-between gap-3 rounded-lg bg-[#f6f9fa] p-2.5">
+            <span class="pl-1 text-xs font-medium text-muted">Measurement system</span>
+            <div class="flex rounded-md border border-line bg-white p-0.5" role="group" aria-label="Measurement system">
+              <button type="button" data-system="us" aria-pressed="true" class="unit-toggle min-h-9 rounded px-3 text-xs font-semibold">US</button>
+              <button type="button" data-system="metric" aria-pressed="false" class="unit-toggle min-h-9 rounded px-3 text-xs font-semibold">Metric</button>
+            </div>
+          </div>
+          {['Room size', 'Tile size'].map((section, index) => <fieldset class="mb-6"><legend class="mb-3 text-sm font-bold">{section}</legend><div class="grid grid-cols-2 gap-4">{dimensions.slice(index*2,index*2+2).map(field => <div><label class="field-label" for={field.id}>{field.label}</label><div class="field-shell"><input id={field.id} name={field.id} class="field-input" type="text" inputmode="decimal" value={field.value} required aria-describedby={`${field.id}-error`} /><select id={`${field.id}-unit`} class="field-unit max-w-20" aria-label={`${field.label} unit`}>{['ft','in','m','cm','mm'].map(unit => <option value={unit} selected={unit===field.unit}>{unit}</option>)}</select></div><p class="helper text-red-700" id={`${field.id}-error`} hidden></p></div>)}</div><p class="helper">{index===0?'Measure only the rectangular area you plan to cover.':'Use the dimensions on the tile product packaging.'}</p></fieldset>)}
+          <div class="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3">
+            <div><label class="field-label" for="waste">Waste allowance</label><div class="field-shell"><input id="waste" class="field-input" type="text" inputmode="decimal" value="10" required aria-describedby="waste-hint waste-error" /><span class="field-unit">%</span></div><p id="waste-hint" class="helper">For cuts, breakage and spare tiles.</p><p class="helper text-red-700" id="waste-error" hidden></p></div>
+            <div><label class="field-label" for="tilesPerBox">Tiles per box</label><div class="field-shell"><input id="tilesPerBox" class="field-input" type="text" inputmode="numeric" value="10" required aria-describedby="box-hint tilesPerBox-error" /></div><p id="box-hint" class="helper">Check your product packaging.</p><p class="helper text-red-700" id="tilesPerBox-error" hidden></p></div>
+            <div class="col-span-2 sm:col-span-1"><label class="field-label" for="pricePerBox">Price per box <span class="font-normal text-muted">(optional)</span></label><div class="field-shell"><span class="field-unit border-r border-l-0">$</span><input id="pricePerBox" class="field-input" type="text" inputmode="decimal" placeholder="0.00" aria-describedby="price-hint pricePerBox-error" /></div><p id="price-hint" class="helper">USD. Tile materials only.</p><p class="helper text-red-700" id="pricePerBox-error" hidden></p></div>
+          </div>
+          <p id="form-error" class="mt-5 rounded-lg bg-red-50 p-3 text-sm text-red-800" role="alert" hidden></p>
+          <div class="mt-7 flex items-center justify-between gap-3 border-t border-line pt-5"><button type="reset" class="btn-secondary"><Icon name="reset" size={17}/>Reset</button><button type="submit" class="btn-primary">Calculate tiles<Icon name="arrow" size={18}/></button></div>
+        </form>
+      </section>
+      <section id="estimate-results" class="panel border-[#dcebf0] bg-[#eff8fb]" aria-labelledby="results-title" tabindex="-1">
+        <div class="mb-6 flex items-start justify-between gap-3"><div><h2 id="results-title" class="text-xl font-bold tracking-tight">Your project estimate</h2><p id="result-status" class="mt-1 text-sm text-muted" aria-live="polite">Based on the example measurements shown.</p></div><span class="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold tracking-wide text-teal">02 / RESULTS</span></div>
+        <div class="grid grid-cols-2 gap-3">{results.map(item => <div class="result-card"><span class="icon-box hidden xl:flex"><Icon name={item.icon}/></span><div class="min-w-0"><h3 class="text-xs font-medium text-muted">{item.label}</h3><p class="result-value"><span id={`result-${item.key}`}>{item.value}</span> <span id={`unit-${item.key}`} class="text-base font-semibold">{item.unit}</span></p><p id={`note-${item.key}`} class="mt-1 text-[11px] leading-relaxed text-muted">{item.note}</p></div></div>)}</div>
+        <div class="mt-4 flex gap-3 rounded-lg bg-[#e0eef5] p-4 text-xs leading-relaxed text-[#426379]"><span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#087ca2] text-white"><Icon name="info" size={18}/></span><p>This is an <strong>area-based estimate</strong>. Grout, your actual layout and reuse of cut pieces are not calculated. Confirm quantities with your installer before buying.</p></div>
+        <p id="box-surplus" class="mt-4 text-center text-xs text-muted">8 extra tiles from rounding up to full boxes.</p>
+        <a id="open-layout" href="/layout/" class="btn-primary mt-5 w-full">Explore this tile layout <Icon name="arrow" size={18}/></a>
+      </section>
+    </div>
+    <noscript><p class="mt-5 rounded-lg bg-amber-50 p-5">Enable JavaScript to calculate your own estimate. The values above are the 10 × 12 ft worked example below.</p></noscript>
+    <section id="how-it-works" class="scroll-mt-6 py-12 sm:py-14">
+      <div class="grid gap-8 lg:grid-cols-[1.1fr_2fr]"><div><p class="eyebrow">From measurements to materials</p><h2 class="mt-2 text-2xl font-bold tracking-tight">A plan in three simple steps.</h2><p class="mt-3 text-sm leading-relaxed text-muted">Know what goes into your estimate before you head to the store.</p></div><ol class="grid gap-6 sm:grid-cols-3">{[['Measure your space','Enter the width and length of a rectangular room, then your tile dimensions.'],['Set your allowance','Choose a waste allowance and enter the number of tiles in each full box.'],['Check your estimate','Review quantities and optional cost. Discuss your layout with your installer.']].map(([title,copy],index)=><li><span class="flex size-8 items-center justify-center rounded-full bg-[#dbedf0] text-sm font-bold text-teal">{index+1}</span><h3 class="mt-3 text-sm font-bold">{title}</h3><p class="mt-2 text-xs leading-relaxed text-muted">{copy}</p></li>)}</ol></div>
+    </section>
+    <p class="mb-8 text-sm leading-7 text-muted">Need help with your inputs? <a class="font-semibold text-teal underline underline-offset-4" href="/guides/how-to-measure-a-room-for-tile/">Read how to measure a room for tile</a> or <a class="font-semibold text-teal underline underline-offset-4" href="/guides/tile-waste-allowance/">compare waste allowance examples</a>.</p>
+    <section id="calculation-method" class="grid scroll-mt-6 gap-8 border-t border-line pt-10 md:grid-cols-[1.3fr_1fr]">
+      <div><p class="eyebrow">The numbers, explained</p><h2 class="mt-2 text-2xl font-bold tracking-tight">How we calculate your tiles</h2><p class="mt-4 text-sm leading-7 text-muted">First, we divide the room area by the area of one tile. The base tile count is this quantity rounded up. For the allowance estimate, we apply your chosen percentage to the <strong class="text-ink">unrounded area ratio</strong>, then round up to a whole tile. We round up once more to buy full boxes.</p><ol class="mt-5 space-y-3 rounded-xl border border-line bg-white p-5 font-mono text-xs leading-relaxed text-muted"><li>Room area = room width × room length</li><li>Base tiles = ceil(room area ÷ tile area)</li><li>Required tiles = ceil(area ratio × (1 + allowance ÷ 100))</li><li>Boxes = ceil(required tiles ÷ tiles per box)</li><li>Purchased tiles = boxes × tiles per box</li><li>Estimated cost = boxes × price per box</li></ol><p class="mt-4 text-xs leading-relaxed text-muted">“Ceil” means round up to the next whole number. Waste allowance is a planning input, not a universal installation recommendation. Tax, delivery, grout, adhesive and labor are excluded from the cost.</p></div>
+      <aside class="self-start rounded-2xl bg-[#eaf4f3] p-6 sm:p-8"><p class="eyebrow">A worked example</p><h3 class="mt-3 text-xl font-bold">A 10 × 12 ft room</h3><p class="mt-3 text-sm leading-relaxed text-muted">With 12 × 12 in tiles, 10% allowance and 10 tiles per box:</p><dl class="mt-5 space-y-3 text-sm"><div class="flex justify-between"><dt class="text-muted">Room area</dt><dd class="font-semibold">120 sq ft</dd></div><div class="flex justify-between"><dt class="text-muted">Base tiles</dt><dd class="font-semibold">120 tiles</dd></div><div class="flex justify-between"><dt class="text-muted">With 10% allowance</dt><dd class="font-semibold">132 tiles</dd></div><div class="flex justify-between border-t border-[#cce2e0] pt-3"><dt class="font-semibold">Buy full boxes</dt><dd class="font-bold text-teal">14 boxes · 140 tiles</dd></div></dl><p class="mt-5 text-xs leading-relaxed text-muted">At an illustrative $30 per box, tile materials cost $420. This is an example price, not a current product quote.</p><button id="load-example" type="button" class="btn-secondary mt-4 -ml-3">Try these measurements <Icon name="arrow" size={17}/></button></aside>
+    </section>
+  </div>
+</SiteLayout>
+<style>
+  .unit-toggle[aria-pressed='true'] { background: #087d92; color: white; }
+  @media (max-width: 380px) { .result-value { font-size: 1.25rem; } .result-card { padding: .85rem; } }
+</style>
+<script>import '../../scripts/calculator';</script>

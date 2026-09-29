@@ -1,0 +1,83 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { operatorContact, operatorProfile } from '../../../../scripts/site-config.mjs';
+const contact = operatorContact(process.env);
+const operator = operatorProfile(process.env);
+---
+<SiteLayout title="Privacy & data handling" description="How the project collection and Tile Planner handle browser calculations, tool URLs and contact actions, with the current hosting and service verification status." noindex={true}>
+  <section class="border-b border-line bg-[#eff5f3] py-12 sm:py-16">
+    <div class="shell">
+      <p class="eyebrow">Privacy & data handling</p>
+      <h1 class="mt-4 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl">What happens to your information.</h1>
+      <p class="body-copy mt-5 max-w-2xl text-lg">This notice covers the project collection website and Tile Planner: its home, calculator, layout tool and guides. It describes the current local implementation, including the information carried when you follow a tool link.</p>
+      <p class="body-copy mt-4 text-sm">Implementation reviewed: <time datetime="2026-09-27">September 27, 2026</time>.</p>
+    </div>
+  </section>
+  <div class="shell">
+    <aside class="panel mt-8" aria-labelledby="privacy-status">
+      <h2 id="privacy-status" class="text-xl font-bold">Local preview · operating details unverified</h2>
+      <p class="body-copy mt-3">Public deployment has not been verified. The hosting account, live settings, log handling and email handling arrangements still need confirmation. This notice remains an incomplete local preview and is marked not to be indexed, even if public website addresses are configured.</p>
+      <p class="body-copy mt-3">Before publication, the operator must confirm the responsible person or organization, a working privacy contact, service providers, actual data uses, access, retention and processing locations. This page does not certify legal compliance.</p>
+    </aside>
+    <nav aria-label="On this page" class="flex flex-wrap gap-x-6 gap-y-3 border-b border-line py-6 text-sm font-medium text-teal">
+      <a href="#browser">Calculations</a><a href="#urls">Tool links</a><a href="#contact">Contact</a><a href="#hosting">Hosting</a><a href="#services">Other services</a><a href="#choices">Your choices</a>
+    </nav>
+
+    <section id="browser" aria-labelledby="browser-heading" class="grid gap-6 py-12 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">Inside the browser</p><h2 id="browser-heading" class="section-title mt-3">Calculations and storage.</h2></div>
+      <div class="body-copy space-y-4">
+        <p>Tile Planner uses room and tile dimensions, units, waste allowance, tiles per box and an optional USD box price to calculate estimates. The layout tool also uses grout width, tile rotation and the starting point. With the tools running, entering or changing these values computes the result in your browser; it does not submit a calculation to an application server.</p>
+        <p>The current application has no user accounts, login, saved-project database or message submission endpoint. It does not write your estimates to localStorage, sessionStorage, IndexedDB or application cookies. There is no save-and-sync feature.</p>
+        <p>This does not mean that no information can be retained anywhere. Your browser may keep history, cached pages or restored form state. Links can contain inputs, and requesting a page involves the server that delivers it, as explained below.</p>
+      </div>
+    </section>
+
+    <section id="urls" aria-labelledby="urls-heading" class="grid gap-6 border-t border-line py-12 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">When you move between tools</p><h2 id="urls-heading" class="section-title mt-3">Inputs travel in tool links.</h2></div>
+      <div class="body-copy space-y-4">
+        <p>The calculator’s layout link and the layout’s calculator link carry the current inputs in the part of the URL after the question mark. This includes measurements and units, precision-preserving measurement values, allowance, box size, optional price and layout settings. Worked-example links also contain sample inputs.</p>
+        <p>Following one of these links requests that URL from the site serving the destination. The query values can therefore appear in browser history and, depending on hosting settings, server or service-provider request records. Anyone receiving a copied tool link can read its included inputs. Simply editing an input does not update the address bar; a copied address may describe the inputs originally used to open the page.</p>
+        <p>Review links before sharing them. Do not add names, home addresses or other private details to a URL. To open the tool without query inputs, use its plain path, such as <code>/calculator/</code> or <code>/layout/</code>. Resetting the fields does not erase a previously visited URL, shared link or server record.</p>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-heading" class="grid gap-6 border-t border-line py-12 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">Questions and error reports</p><h2 id="contact-heading" class="section-title mt-3">Contact actions and email.</h2></div>
+      <div class="body-copy min-w-0 space-y-4 [overflow-wrap:anywhere]">
+        {operator.complete ? <p>Configured operator: <strong class="text-ink">{operator.name}</strong>. See the <a class="text-link" href="/about/">operator introduction</a>.</p> : <p>The operator’s public identity has not been supplied in full. The <a class="text-link" href="/about/">About page</a> shows the current status.</p>}
+        {contact.email ? <p>A public contact address is configured: <strong class="text-ink">{contact.email}</strong>. Use the <a class="text-link" href="/contact/">Contact page</a> to copy it or open your mail app. The mailbox provider, access arrangements and message retention still require confirmation.</p> : <p>No public contact mailbox has been supplied. The <a class="text-link" href="/contact/">Contact page</a> currently explains how to prepare an issue report, but has no email action or working submission channel.</p>}
+        <p>When an address is available, copying it writes only that public address to your clipboard after you press the copy button. The site does not read your clipboard. Opening the email link passes an address and report outline to your configured mail app; you choose what to include and whether to send. Neither action sends a message through this website.</p>
+        <p>If you send an email, your email service, the recipient’s service and the recipient can process the sender address, message, attachments and delivery information. The intended purpose is to answer your question or investigate the reported issue. Actual mailbox handling and retention have not been verified, so no deletion period or data location is promised here.</p>
+        <p>Include only what is needed to explain the problem. Remove identifying details from screenshots and links. Do not send passwords, payment details or access tokens.</p>
+      </div>
+    </section>
+
+    <section id="hosting" aria-labelledby="hosting-heading" class="grid gap-6 border-t border-line py-12 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">Delivering a page</p><h2 id="hosting-heading" class="section-title mt-3">Hosting and technical requests.</h2></div>
+      <div class="body-copy space-y-4">
+        <p>Opening a website sends requests to its host. Technical information can include your IP address, requested URL, request time and browser headers. A static website with no application database can still involve this processing.</p>
+        <p>The project is configured for possible deployment using Cloudflare Workers Static Assets. That local configuration is not evidence that Cloudflare currently hosts a public version of either site. No live hosting account or its logging, security, retention or location settings have been verified for this notice.</p>
+        <p>If Cloudflare is used, its service processing must be considered alongside the site’s own handling. Cloudflare’s policy describes processing of end-user IP addresses and traffic information. See <a class="text-link" href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s privacy policy</a> and its <a class="text-link" href="https://developers.cloudflare.com/workers/static-assets/">Static Assets documentation</a>. These provider references do not establish which settings this site uses.</p>
+      </div>
+    </section>
+
+    <section id="services" aria-labelledby="services-heading" class="grid gap-6 border-t border-line py-12 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">Current service status</p><h2 id="services-heading" class="section-title mt-3">Ads, analytics and external links.</h2></div>
+      <div class="body-copy space-y-4">
+        <p>The current site code contains no advertising scripts, ad units, visitor analytics, tracking pixels or consent-management platform. No advertising consent choices are collected or stored. Calculation does not require advertising consent. Planned services are not active services.</p>
+        <p>Fonts use your device’s system fonts. Screenshots, styles and scripts are served with these static sites; third-party media or social widgets are not embedded. Guides and this notice link to external references. Following an external link takes you to a service with its own privacy practices and may send referral information according to your browser’s policy.</p>
+        <p>If advertising, analytics, consent management or saved calculations are added, this notice must be updated to explain the actual service, data and controls before that processing is enabled.</p>
+      </div>
+    </section>
+
+    <section id="choices" aria-labelledby="choices-heading" class="rounded-2xl border border-line bg-[#eff5f3] p-6 sm:p-9">
+      <p class="eyebrow">Practical choices</p><h2 id="choices-heading" class="section-title mt-3">Keep the shared details small.</h2>
+      <ul class="body-copy mt-5 list-disc space-y-3 pl-5">
+        <li>Use measurements without personal identifiers, and leave the optional box price blank when you do not need a cost estimate.</li>
+        <li>Check query values before copying or following tool links. Browser history and cached data are managed through your browser; clearing them does not remove copies held elsewhere.</li>
+        <li>Review an email draft and its attachments before sending. Once an actual contact channel is available, it can be used to ask about information shared with the operator. A request is not a guarantee of deletion from other providers or previously shared copies.</li>
+      </ul>
+      <p class="body-copy mt-5">Return to this page for changes to the implemented processing. The review date above describes this version of the notice; it is not a public launch date.</p>
+    </section>
+  </div>
+</SiteLayout>

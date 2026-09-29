@@ -1,0 +1,64 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { projects, projectUrl } from '../data/projects';
+const origins = { tile: import.meta.env.PROJECT_TILE_ORIGIN || (import.meta.env.DEV ? 'http://localhost:4321' : undefined) };
+---
+<SiteLayout title="Practical web projects" description="Explore a collection of focused web projects for everyday decisions. Start with Tile Planner: tile quantities, whole boxes and straight-grid layouts.">
+  <section class="border-b border-line bg-[#eff5f3] py-14 sm:py-20 lg:py-24">
+    <div class="shell grid items-end gap-10 lg:grid-cols-[1.4fr_0.6fr] lg:gap-16">
+      <div>
+        <p class="eyebrow">A collection of practical web projects</p>
+        <h1 class="mt-5 max-w-3xl text-[2.75rem] font-bold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">Small tools.<br />Clearer decisions.</h1>
+        <p class="body-copy mt-6 max-w-xl text-lg">Focused projects that make an everyday task easier to understand. Explore what each one does, see its limits, and try it for yourself.</p>
+        <a href="#projects" class="button mt-8">Explore the projects <span class="ml-6" aria-hidden="true">↓</span></a>
+      </div>
+      <div class="border-l-2 border-teal pl-6 lg:mb-2">
+        <p class="eyebrow">Start here</p>
+        <p class="mt-4 text-2xl font-semibold leading-snug tracking-tight">A useful tool starts with a clear question.</p>
+        <p class="body-copy mt-3 text-sm">The first project brings tile quantities and layout choices together, from an initial measurement to a plan you can inspect.</p>
+      </div>
+    </div>
+  </section>
+  <section id="projects" aria-labelledby="projects-heading" class="shell scroll-mt-6 py-14 sm:py-20">
+    <div class="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-10">
+      <div><p class="eyebrow">Explore the collection</p><h2 id="projects-heading" class="section-title mt-3">Projects you can use.</h2></div>
+      <p class="max-w-sm text-sm leading-6 text-muted">Read the story behind a project or go straight to the tool.</p>
+    </div>
+    <div class="space-y-8">
+      {projects.map(project => {
+        const siteUrl = projectUrl(project, origins);
+        return <article data-project={project.id} aria-labelledby={`project-${project.id}`} class="overflow-hidden rounded-2xl border border-line bg-white lg:grid lg:grid-cols-[1.05fr_0.95fr]">
+          <figure class="min-w-0 border-b border-line bg-[#edf2f4] p-5 sm:p-8 lg:border-b-0 lg:border-r">
+            <a href={project.detailPath} class="block overflow-hidden rounded-lg border border-line bg-white shadow-sm" aria-label={`Explore ${project.name}`}>
+              <img src={project.image} alt={project.imageAlt} width="1425" height="2055" class="aspect-[1.2] w-full object-cover object-top" loading="lazy" />
+            </a>
+            <figcaption class="mt-4 text-xs leading-5 text-muted">Actual project screen · example inputs · cropped preview</figcaption>
+          </figure>
+          <div class="flex flex-col p-6 sm:p-9 lg:p-10">
+            <p class="eyebrow">{project.category}</p>
+            <h3 id={`project-${project.id}`} class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">{project.name}</h3>
+            <p class="body-copy mt-4">{project.summary}</p>
+            <ul class="mt-6 flex flex-wrap gap-2" aria-label={`${project.name} features`}>{project.tools.map(tool => <li class="rounded-full border border-line px-3 py-1.5 text-xs font-medium text-muted">{tool.name}</li>)}</ul>
+            <div class="mt-auto pt-8">
+              <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
+                <a class="button" href={project.detailPath}>Explore {project.name} <span class="ml-4" aria-hidden="true">→</span></a>
+                {siteUrl && <a class="text-link text-sm" href={siteUrl}>Use {project.name} <span aria-hidden="true">↗</span></a>}
+              </div>
+              {!siteUrl && <p class="mt-4 text-sm leading-6 text-muted">The public tool address is not available yet. Explore the project for its features, examples and limits.</p>}
+            </div>
+          </div>
+        </article>;
+      })}
+    </div>
+  </section>
+  <section id="approach" aria-labelledby="approach-heading" class="scroll-mt-6 border-y border-line bg-white py-14 sm:py-16">
+    <div class="shell">
+      <div class="max-w-xl"><p class="eyebrow">The approach</p><h2 id="approach-heading" class="section-title mt-3">Know what a tool can tell you.</h2><p class="body-copy mt-4">Each project has a place to explain its purpose, show how it works, and put the results in context.</p></div>
+      <div class="mt-9 grid gap-8 md:grid-cols-3 md:gap-10">
+        <div class="border-t-2 border-teal pt-5"><h3 class="text-lg font-bold">A focused task</h3><p class="body-copy mt-3 text-sm">Start with a specific question. The project overview explains who the tool helps and what it is designed to do.</p></div>
+        <div class="border-t-2 border-teal pt-5"><h3 class="text-lg font-bold">A visible example</h3><p class="body-copy mt-3 text-sm">See real screens and follow a worked example before entering your own inputs. The steps make the result easier to check.</p></div>
+        <div class="border-t-2 border-teal pt-5"><h3 class="text-lg font-bold">An honest boundary</h3><p class="body-copy mt-3 text-sm">Read the assumptions, verification methods and limitations alongside the features, so you can decide how to use the output.</p></div>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

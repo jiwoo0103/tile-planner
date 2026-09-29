@@ -1,0 +1,94 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { projects, projectUrl, tileWalkthrough as example } from '../../data/projects';
+const project = projects.find(item => item.id === 'tile-planner')!;
+const origins = { tile: import.meta.env.PROJECT_TILE_ORIGIN || (import.meta.env.DEV ? 'http://localhost:4321' : undefined) };
+const siteUrl = projectUrl(project, origins);
+const url = (path: string) => projectUrl(project, origins, path);
+---
+<SiteLayout title="Tile Planner — project overview" description="See how Tile Planner connects a tile purchase estimate with a straight-grid layout. Explore real screens, a worked example, verification and limitations.">
+  <section class="border-b border-line bg-[#eff5f3] py-12 sm:py-16">
+    <div class="shell">
+      <a href="/#projects" class="text-sm font-medium text-muted hover:text-teal">← All projects</a>
+      <div class="mt-8 grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
+        <div>
+          <p class="eyebrow">{project.category}</p>
+          <h1 class="mt-4 text-5xl font-bold tracking-tight sm:text-6xl">{project.name}</h1>
+          <p class="mt-5 max-w-xl text-xl leading-8 text-muted">{project.summary}</p>
+          <p class="body-copy mt-4">A practical starting point for a homeowner comparing tile sizes or preparing a quantity discussion with an installer.</p>
+          <div class="mt-7 flex flex-wrap items-center gap-5">
+            {siteUrl ? <a class="button" href={siteUrl}>Open Tile Planner <span class="ml-5" aria-hidden="true">↗</span></a> : <p class="rounded-lg border border-line bg-white px-4 py-3 text-sm text-muted">The public tool address is not available yet.</p>}
+            <a class="text-link text-sm" href="#walkthrough">See a worked example ↓</a>
+          </div>
+          <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted" aria-label="Project features"><li>No sign-up</li><li>US & metric units</li><li>Calculates in your browser</li></ul>
+        </div>
+        <figure class="min-w-0 rounded-2xl border border-line bg-white p-3 shadow-sm">
+          <a href={project.image} aria-label="View the full desktop calculator capture"><img src={project.image} alt={project.imageAlt} width="1425" height="2055" class="aspect-[1.25] w-full rounded-lg object-cover object-top" fetchpriority="high" /></a>
+          <figcaption class="px-2 pb-1 pt-3 text-xs leading-5 text-muted">Actual desktop calculator · example inputs · cropped preview</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="shell">
+    <nav aria-label="On this page" class="flex flex-wrap gap-x-6 gap-y-3 border-b border-line py-6 text-sm font-medium text-teal">
+      <a href="#purpose">The problem</a><a href="#tools">What it does</a><a href="#walkthrough">Try a scenario</a><a href="#limits">Where it stops</a><a href="#verification">How it is checked</a>
+    </nav>
+
+    <section id="purpose" class="grid gap-6 py-14 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">The problem</p><h2 class="section-title mt-3">A box count does not explain an edge cut.</h2></div>
+      <div class="body-copy space-y-4"><p>Tile planning asks two different questions: how much material might you buy, and how might that material meet the walls? A room can need the same number of boxes under two starting points while having very different edge pieces.</p><p>Tile Planner keeps those decisions next to each other. Begin with an area estimate, carry the same dimensions into the layout, and compare what changes. Its English interface starts with familiar feet and inches while allowing meters, centimeters and millimeters for each measurement.</p><p>It suits early planning for one rectangular area with rectangular tiles. The output gives you numbers to discuss and a grid to inspect before checking the actual space and product instructions.</p></div>
+    </section>
+
+    <section id="tools" class="border-t border-line py-14">
+      <p class="eyebrow">One project, connected tools</p><h2 class="section-title mt-3">From a shopping estimate to a visible plan.</h2>
+      <div class="mt-8 grid gap-5 md:grid-cols-3">
+        {project.tools.map((tool, index) => <article class="panel flex flex-col"><p class="text-sm font-bold text-teal">0{index + 1}</p><h3 class="mt-4 text-xl font-bold">{tool.name}</h3><p class="body-copy mt-3 grow">{tool.description}</p>{url(tool.path) && <a href={url(tool.path)} class="text-link mt-6 text-sm">Open {tool.name.toLowerCase()} ↗</a>}</article>)}
+      </div>
+      <div class="mt-8 grid gap-8 md:grid-cols-2">
+        <figure class="min-w-0">
+          <div class="overflow-hidden rounded-xl border border-line bg-white"><img src="/images/tile-planner/layout-desktop.png" alt="Actual desktop layout planner with a room grid, shaded edge cuts and purchase summary." width="1425" height="2154" loading="lazy" class="aspect-[1.25] w-full object-cover object-top" /></div>
+          <figcaption class="body-copy mt-4 text-sm"><strong class="text-ink">Inspect the grid.</strong> Grout, rotation and corner or center starts change the layout. Labels report all four edge dimensions. <a class="text-link" href="/images/tile-planner/layout-desktop.png">View full desktop capture</a>.</figcaption>
+        </figure>
+        <figure class="min-w-0">
+          <div class="flex justify-center overflow-hidden rounded-xl border border-line bg-[#edf2f4] px-7 pt-6 sm:px-10"><img src="/images/tile-planner/calculator-mobile.png" alt="Actual mobile calculator with stacked measurement fields and a full-width Calculate tiles button." width="375" height="4089" loading="lazy" class="aspect-[0.86] w-full max-w-[290px] rounded-t-lg object-cover object-top shadow-sm" /></div>
+          <figcaption class="body-copy mt-4 text-sm"><strong class="text-ink">Use it beside your measurements.</strong> On a phone, inputs and results stack vertically. Both previews are cropped from local browser verification captures. <a class="text-link" href="/images/tile-planner/calculator-mobile.png">View full mobile capture</a>.</figcaption>
+        </figure>
+      </div>
+      <p class="body-copy mt-7 text-sm">Measurements and layout settings travel in the links between tools. They are not saved in browser storage. A shared URL can contain your entered dimensions and price, so include only the information you intend to share.</p>
+    </section>
+
+    <section id="walkthrough" class="rounded-2xl border border-line bg-[#eff5f3] p-6 sm:p-9">
+      <p class="eyebrow">A complete first run</p><h2 class="section-title mt-3">Plan a 9 × 11 ft room with 12 × 24 in tiles.</h2>
+      <p class="body-copy mt-4 max-w-3xl">Use an illustrative 10% allowance, eight tiles per box and a hypothetical $48 per box. These are teaching inputs, not a recommended allowance or a product quote.</p>
+      <ol class="mt-8 grid gap-8 lg:grid-cols-3">
+        <li><h3 class="font-bold">1. Price the whole boxes</h3><p class="body-copy mt-3 text-sm">The room covers 99 sq ft and each tile covers 2 sq ft. The unrounded ratio is 49.5. Apply 10% to get 54.45, then round to 55 tiles. Buying eight per box means seven boxes and 56 tiles.</p></li>
+        <li><h3 class="font-bold">2. Inspect the edges</h3><p class="body-copy mt-3 text-sm">Open the same inputs with 2 mm grout, 0° orientation and a corner start. The grid has nine columns and six rows: 40 full tiles and 14 cut pieces. Those 54 placed pieces describe the drawing, not the minimum number of tiles to buy.</p></li>
+        <li><h3 class="font-bold">3. Compare a centered start</h3><p class="body-copy mt-3 text-sm">Change only the starting point. Left and right pieces become 296.8 mm wide; top and bottom pieces become 452.2 mm long. The grid now has 28 full tiles and 26 cut pieces. The area-based purchase estimate stays at seven boxes.</p></li>
+      </ol>
+      <dl class="mt-8 grid grid-cols-2 gap-4 border-y border-line py-6 sm:grid-cols-3 lg:grid-cols-5">{example.results.map(result => <div><dt class="text-xs text-muted">{result.label}</dt><dd class="mt-2 text-xl font-bold">{result.value}</dd></div>)}</dl>
+      <p class="body-copy mt-5 text-sm">One of the 56 purchased tiles is extra from rounding 55 required tiles to full boxes. This is separate from the chosen allowance and does not predict usable leftovers. The $336 tile budget excludes tax, shipping, grout, adhesive and labor.</p>
+      <div class="mt-6 flex flex-wrap items-center gap-5">{url(example.calculatorPath) && <a class="button" href={url(example.calculatorPath)}>Load this calculator example ↗</a>}{url(example.layoutPath) && <a class="text-link text-sm" href={url(example.layoutPath)}>Inspect this layout ↗</a>}</div>
+    </section>
+
+    <section id="limits" class="grid gap-8 py-14 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">Where it stops</p><h2 class="section-title mt-3">Keep the estimate in context.</h2></div>
+      <ul class="body-copy list-disc space-y-4 pl-5">
+        <li><strong class="text-ink">One rectangle, one straight grid.</strong> Irregular rooms, obstacles, diagonal patterns, herringbone and custom offsets are outside this tool.</li>
+        <li><strong class="text-ink">No offcut optimization.</strong> Cut pieces can share a source tile, but the tool does not plan reuse or compute a minimum purchase. Grout is not subtracted from the purchase area.</li>
+        <li><strong class="text-ink">No installation specification.</strong> The grid adds no perimeter movement gap. Confirm actual dimensions, joints, substrate requirements and cuts with your installer and product instructions.</li>
+        <li><strong class="text-ink">A bounded preview.</strong> Above 2,500 placed pieces, the drawing shows the room outline while the numerical counts and edge dimensions remain available.</li>
+      </ul>
+    </section>
+
+    <section id="verification" class="border-t border-line pt-14">
+      <p class="eyebrow">Made to be checked</p><h2 class="section-title mt-3">Visible rules, reproducible examples.</h2>
+      <div class="mt-8 grid gap-8 md:grid-cols-3">
+        <div><h3 class="text-lg font-bold">Exact measurements</h3><p class="body-copy mt-3 text-sm">The calculation engine retains decimal measurements as rational millimeters, so switching units preserves the physical size. It applies the allowance before quantity rounding and calculates whole boxes separately.</p></div>
+        <div><h3 class="text-lg font-bold">Regression checks</h3><p class="body-copy mt-3 text-sm">Automated tests cover equivalent units, rounding boundaries, invalid input, oversized grids and edge geometry. Worked guide links are read from the articles and run through the actual engines; diagram rectangles are checked against the same geometry.</p></div>
+        <div><h3 class="text-lg font-bold">Browser review</h3><p class="body-copy mt-3 text-sm">Desktop and narrow-screen checks exercise real links, input changes, resets and tool-to-tool handoffs. Static builds are checked for page metadata, duplicate IDs, broken local links and missing assets. These checks verify software behavior; they do not certify an installation.</p></div>
+      </div>
+      <div class="mt-10 flex flex-col items-start justify-between gap-6 rounded-2xl bg-ink p-7 text-white sm:flex-row sm:items-center"><div><h3 class="text-xl font-bold">Start with the room you can measure.</h3><p class="mt-2 max-w-xl text-sm leading-6 text-slate-300">Estimate your purchase, compare the edges, then bring the plan to your installer.</p></div>{siteUrl && <a href={siteUrl} class="button shrink-0">Use Tile Planner ↗</a>}</div>
+    </section>
+  </div>
+</SiteLayout>

@@ -1,0 +1,62 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { operatorProfile } from '../../../../scripts/site-config.mjs';
+const operator = operatorProfile(process.env);
+---
+<SiteLayout title="About — operator & principles" description="Why this project collection exists, how Tile Planner is checked, the limits of its estimates, and the principles for correcting errors." noindex={!operator.complete}>
+  <section class="border-b border-line bg-[#eff5f3] py-12 sm:py-16">
+    <div class="shell">
+      <p class="eyebrow">About this collection</p>
+      <h1 class="mt-4 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl">Useful tools, with their workings in view.</h1>
+      <p class="body-copy mt-5 max-w-2xl text-lg">A place for focused web projects that help explain everyday decisions. The purpose is to make a result easier to understand, check and discuss.</p>
+    </div>
+  </section>
+
+  <div class="shell">
+    <nav aria-label="On this page" class="flex flex-wrap gap-x-6 gap-y-3 border-b border-line py-6 text-sm font-medium text-teal">
+      <a href="#operator">The operator</a><a href="#purpose">The purpose</a><a href="#verification">How work is checked</a><a href="#limits">Limits</a><a href="#corrections">Corrections</a>
+    </nav>
+
+    <section id="operator" aria-labelledby="operator-heading" class="grid gap-6 py-12 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">Who is behind it</p><h2 id="operator-heading" class="section-title mt-3">The operator.</h2></div>
+      {operator.complete ? <div class="min-w-0 space-y-4 [overflow-wrap:anywhere]"><p class="text-xl font-bold">{operator.name}</p><p class="body-copy">{operator.bio}</p></div> : <aside class="panel" aria-labelledby="identity-notice"><h3 id="identity-notice" class="text-lg font-bold">Local preview · operator information pending</h3><p class="body-copy mt-3">The operator’s public name and introduction have not yet been supplied in full. This page is an incomplete local preview, not a completed operator profile. The project name does not identify the person or organization responsible for it.</p><p class="body-copy mt-3 text-sm">This page is marked not to be indexed until that information is provided. No professional qualifications, installation experience or independent reviewer are claimed here.</p></aside>}
+    </section>
+
+    <section id="purpose" aria-labelledby="purpose-heading" class="grid gap-6 border-t border-line py-12 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">Why it exists</p><h2 id="purpose-heading" class="section-title mt-3">A clearer starting point.</h2></div>
+      <div class="body-copy space-y-4"><p>The collection starts with Tile Planner. It brings together two early planning questions: how many whole boxes an area estimate suggests buying, and how a straight tile grid meets the edges of a rectangular room.</p><p>The tools expose their assumptions and connect to worked guides so a visitor can reproduce the numbers. They support preparation and comparison; they do not replace a site measurement, product instructions or an installer’s judgment.</p><p><a class="text-link" href="/projects/tile-planner/">Explore the actual project, screens and worked example</a>.</p></div>
+    </section>
+
+    <section id="verification" aria-labelledby="verification-heading" class="border-t border-line py-12">
+      <p class="eyebrow">How work is checked</p><h2 id="verification-heading" class="section-title mt-3">Rules you can follow. Results you can reproduce.</h2>
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        <article class="panel"><h3 class="text-lg font-bold">Calculation checks</h3><p class="body-copy mt-3">Automated tests compare equivalent US and metric inputs, exact decimal boundaries, allowance rounding and whole-box purchases. Measurements use rational millimeters internally. Invalid values and oversized requests are tested as well as normal examples.</p></article>
+        <article class="panel"><h3 class="text-lg font-bold">Layout checks</h3><p class="body-copy mt-3">Tests check centered edge symmetry, corner cuts, rotation and rooms that end within a grout joint. They verify that piece widths and joints account for the room and that large grids keep their numerical results without allocating every drawing rectangle.</p></article>
+        <article class="panel"><h3 class="text-lg font-bold">Content checks</h3><p class="body-copy mt-3">The current guides link to their manufacturer or measurement references and show their assumptions. Tests read the worked-example links from the articles and run those inputs through the calculation engines. The starting-point diagrams are generated from the same layout logic. Examples are calculations, not accounts of completed installations.</p></article>
+        <article class="panel"><h3 class="text-lg font-bold">Page and browser checks</h3><p class="body-copy mt-3">Static checks cover metadata, duplicate identifiers, internal links and local assets. Desktop and mobile browser reviews have exercised the tools’ inputs, resets and links between calculator and layout. These checks establish software behavior; they do not certify materials or installation work.</p></article>
+      </div>
+      <p class="body-copy mt-6"><a class="text-link" href="/projects/tile-planner/#walkthrough">Follow a complete example</a> to compare the purchase estimate with the grid.</p>
+    </section>
+
+    <section id="limits" aria-labelledby="limits-heading" class="grid gap-6 border-t border-line py-12 sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
+      <div><p class="eyebrow">What the result cannot tell you</p><h2 id="limits-heading" class="section-title mt-3">The boundaries stay visible.</h2></div>
+      <ul class="body-copy list-disc space-y-4 pl-5">
+        <li>The purchase estimate uses room area, tile area and your chosen allowance. It does not subtract grout or optimize offcut reuse. A suggested box count is not a guaranteed minimum purchase.</li>
+        <li>The layout supports one rectangle and a straight grid. Placed full tiles and cut pieces describe the diagram; they are not a second purchasing calculation. Irregular rooms, obstacles, diagonal patterns and herringbone are unsupported.</li>
+        <li>No perimeter movement gap or substrate specification is included. Confirm room dimensions, product coverage, joints and installation requirements before ordering or fitting materials.</li>
+        <li>An example allowance is an input to explore, not a universal recommendation. Optional tile cost uses the entered USD price per box and excludes tax, delivery, labor and other materials.</li>
+      </ul>
+    </section>
+
+    <section id="corrections" aria-labelledby="corrections-heading" class="rounded-2xl border border-line bg-[#eff5f3] p-6 sm:p-9">
+      <p class="eyebrow">Error correction principles</p><h2 id="corrections-heading" class="section-title mt-3">Make the cause and the correction checkable.</h2>
+      <p class="body-copy mt-4 max-w-3xl">An unexpected result should first be traced to its page, exact inputs, units and assumptions. The correction process for this collection follows three steps:</p>
+      <ol class="mt-7 grid gap-7 md:grid-cols-3">
+        <li><h3 class="font-bold">1. Reproduce and compare</h3><p class="body-copy mt-3 text-sm">Repeat the inputs, compare the published formula and relevant source guidance, and distinguish an input problem, an unsupported case and a software or content error.</p></li>
+        <li><h3 class="font-bold">2. Fix the affected explanation</h3><p class="body-copy mt-3 text-sm">Keep the calculation, results, worked examples and diagrams consistent. If a limitation caused confusion, explain it where the result is used. Do not present uncertainty as a verified rule.</p></li>
+        <li><h3 class="font-bold">3. Verify and record</h3><p class="body-copy mt-3 text-sm">Add a regression check for a reproducible calculation defect, rerun the affected checks and review the changed screen. For a substantive guide correction, update its modification date and explain the correction in the article.</p></li>
+      </ol>
+      <p class="body-copy mt-7 text-sm">These are correction principles, not a claim that every error has been found or a guarantee of an installation outcome.</p>
+    </section>
+  </div>
+</SiteLayout>

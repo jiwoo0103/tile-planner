@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+@theme {
+  --color-ink: #182f3c;
+  --color-muted: #566876;
+  --color-teal: #087484;
+  --color-line: #dbe4e7;
+  --font-sans: 'Segoe UI', Arial, sans-serif;
+}
+@layer base {
+  body { margin: 0; background: #fcfdfc; color: var(--color-ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 3px solid #087484; outline-offset: 5px; }
+  img { max-width: 100%; }
+}
+@layer components {
+  .shell { @apply mx-auto w-full max-w-[1160px] px-5 sm:px-8; }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[0.18em] text-teal; }
+  .button { @apply inline-flex min-h-12 items-center justify-center rounded-lg bg-teal px-6 py-3 text-sm font-semibold text-white hover:bg-[#075c69]; }
+  .text-link { @apply font-semibold text-teal underline decoration-teal/40 underline-offset-4 hover:decoration-teal; }
+  .section-title { @apply text-2xl font-bold tracking-tight sm:text-3xl; }
+  .body-copy { @apply leading-7 text-muted; }
+  .panel { @apply rounded-2xl border border-line bg-white p-6 sm:p-8; }
+}

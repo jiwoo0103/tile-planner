@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+interface Props { title: string; description: string; noindex?: boolean; }
+const { title, description, noindex = false } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const verification = Astro.site && Astro.url.pathname === '/' ? import.meta.env.PROJECT_GOOGLE_SITE_VERIFICATION : undefined;
+const publisher = Astro.site && Astro.url.pathname === '/' ? import.meta.env.PROJECT_ADSENSE_PUBLISHER : undefined;
+const brandOrigin = import.meta.env.PROJECT_BRAND_ORIGIN || (import.meta.env.DEV ? 'http://localhost:4322' : undefined);
+const projectDetail = brandOrigin ? `${brandOrigin}/projects/tile-planner/` : undefined;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#087d92" />
+    {verification && <meta name="google-site-verification" content={verification} />}
+    {publisher && <meta name="google-adsense-account" content={`ca-${publisher}`} />}
+    <meta name="robots" content={!Astro.site || noindex ? 'noindex, nofollow' : 'index, follow'} />
+    <title>{title} | Tile Planner</title>
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={`${title} | Tile Planner`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Tile Planner" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-50 focus:rounded focus:bg-ink focus:px-4 focus:py-3 focus:text-white">Skip to content</a>
+    <header class="border-b border-line bg-white">
+      <div class="shell flex min-h-20 flex-col items-start justify-between sm:flex-row sm:items-center sm:gap-5">
+        <a href="/" class="flex shrink-0 items-center gap-2.5 py-4 text-xl font-bold tracking-tight sm:py-0" aria-label="Tile Planner home">
+          <span class="grid size-7 grid-cols-2 gap-0.5" aria-hidden="true"><span class="rounded-sm bg-[#65b1be]"></span><span class="rounded-sm bg-[#087b92]"></span><span class="rounded-sm bg-[#087b92]"></span><span class="rounded-sm bg-[#65b1be]"></span></span>Tile Planner
+        </a>
+        <nav aria-label="Main navigation" class="flex w-full items-center justify-between gap-5 text-sm font-medium sm:w-auto sm:gap-7">
+          <a href="/calculator/" class:list={['border-b-2 py-3 sm:py-7', Astro.url.pathname === '/calculator/' ? 'border-teal text-teal' : 'border-transparent text-muted hover:text-teal']} aria-current={Astro.url.pathname === '/calculator/' ? 'page' : undefined}>Calculator</a>
+          <a href="/layout/" class:list={['border-b-2 py-3 sm:py-7', Astro.url.pathname === '/layout/' ? 'border-teal text-teal' : 'border-transparent text-muted hover:text-teal']} aria-current={Astro.url.pathname === '/layout/' ? 'page' : undefined}>Layout</a>
+          <a href="/guides/" class:list={['border-b-2 py-3 sm:py-7', Astro.url.pathname.startsWith('/guides/') ? 'border-teal text-teal' : 'border-transparent text-muted hover:text-teal']} aria-current={Astro.url.pathname === '/guides/' ? 'page' : undefined}>Guides</a>
+          <a href="/calculator/#how-it-works" class="hidden text-muted hover:text-teal sm:block">How it works</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="mt-16 border-t border-line bg-white py-7">
+      <div class="shell flex flex-col justify-between gap-4 text-xs text-muted sm:flex-row sm:flex-wrap sm:items-center">
+        <p><strong class="mr-4 text-sm text-ink">Tile Planner</strong> A little planning. A better starting point.</p>
+        <a class="text-teal hover:underline" href="/calculator/#calculation-method">Understand your estimate ↗</a>
+        {projectDetail && <a class="text-teal hover:underline" href={projectDetail}>About this project ↗</a>}
+        {brandOrigin && <a class="text-teal hover:underline" href={`${brandOrigin}/about/`}>Operator & principles ↗</a>}
+        {brandOrigin && <a class="text-teal hover:underline" href={`${brandOrigin}/contact/`}>Contact & error reports ↗</a>}
+        {brandOrigin && <a class="text-teal hover:underline" href={`${brandOrigin}/privacy/`}>Privacy & data ↗</a>}
+      </div>
+    </footer>
+  </body>
+</html>
